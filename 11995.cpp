@@ -2,57 +2,43 @@
 
 using namespace std;
 
-int findHighest (int numbers[], int size, int highest) {
-	int newHighest = 0;
-	
-	for (int i = 0; i < size; i++)
-		if (numbers[i] > newHighest && numbers[i] < highest)
-			newHighest = numbers[i];
-			
-	return newHighest;
-}
-
 int main () {
-	int n, command, rem = 0, size;
+	int n, command;
 	int x;
 	
-	int insOrder[1000];
+	stack<int> myStack;
+	queue<int> myQueue;
 	priority_queue<int> pOrder;
 	
 	bool isQueue, isPriorityQueue, isStack;
 	
 	while ((!(cin >> n).eof())) {
 		isQueue = isPriorityQueue = isStack = true;
-		rem = size = 0;
-		
+
 		// Reads input
 		while (n--) {
 			cin >> command >> x;
 			
 			if (command == 1) {
-				insOrder[size++] = x;
+				myStack.push(x);
+				myQueue.push(x);
 				pOrder.push(x);
 			} 
 			else if (command == 2) {						
-				if (rem >= size) {
-					isQueue = isPriorityQueue = isStack = false;
-				}
-				
-				if (isStack && x != insOrder[size - 1 - rem]) {
+				if (isStack && (myStack.empty() || x != myStack.top())) {
 					isStack = false;
-				} 
+				} else if (isStack && !myStack.empty())
+					myStack.pop ();
 				
-				if (isQueue && x != insOrder[rem]) {
+				if (isQueue && (myQueue.empty() || x != myQueue.front())) {
 					isQueue = false;
-				}
+				} else if (isQueue && !myQueue.empty())
+					myQueue.pop ();
 				
-				if (isPriorityQueue && !pOrder.empty() && x != pOrder.top()) {
+				if (isPriorityQueue && (pOrder.empty() || x != pOrder.top())) {
 					isPriorityQueue = false;
-				}
-				else
-					pOrder.pop();
-				
-				rem ++;
+				} else if (isPriorityQueue && !pOrder.empty())
+					pOrder.pop ();
 			}
 		}
 		
@@ -70,6 +56,12 @@ int main () {
 			
 		while (!pOrder.empty())
 			pOrder.pop();
+			
+		while (!myQueue.empty())
+			myQueue.pop();
+	
+		while (!myStack.empty())
+			myStack.pop();
 	}
 
 	return 0;
