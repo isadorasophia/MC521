@@ -10,7 +10,7 @@ int main () {
     string command;
     int t, qt, scenario, appear, lowest, aux, i, j;
     
-    vector<queue <int>> teams (1005);
+    vector< queue <int> > teams (1005);
     map <int, int> teamKey;
     map <int, int> teamOrder;
     
@@ -36,17 +36,15 @@ int main () {
         lowest = 0;
         
         while (command.compare("STOP") != 0) {
-            if (command.compare("ENQUEUE")) {
+            if (command.compare("ENQUEUE") == 0) {
                 cin >> aux;
-                
-                cout << teamKey[aux] << endl;
                 
                 if (teamOrder.find(teamKey[aux]) == teamOrder.end())
                     teamOrder[teamKey[aux]] = appear++;
                 
                 teams[teamOrder[teamKey[aux]]].push(aux);
             }
-            else if (command.compare("DEQUEUE")) {
+            else if (command.compare("DEQUEUE") == 0) {
                 cout << teams[lowest].front() << endl;
                     
                 teams[lowest].pop();
@@ -55,7 +53,6 @@ int main () {
                     lowest++;
             }
             
-            cout << endl;
             cin >> command;
         }
         
@@ -67,6 +64,7 @@ int main () {
                 teams[i].pop();
         }
         
+        cout << endl;
         cin >> t;
         scenario++;
     }
