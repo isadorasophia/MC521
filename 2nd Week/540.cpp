@@ -10,7 +10,7 @@ int main () {
     string command;
     int t, qt, scenario, appear, lowest, aux, i, j;
     
-    vector< queue <int> > teams (1005);
+    vector< queue <int> > teams (5000);
     map <int, int> teamKey;
     map <int, int> teamOrder;
     
@@ -39,18 +39,25 @@ int main () {
             if (command.compare("ENQUEUE") == 0) {
                 cin >> aux;
                 
+                // If there is this team in the team order contabilizator...
                 if (teamOrder.find(teamKey[aux]) == teamOrder.end())
                     teamOrder[teamKey[aux]] = appear++;
                 
                 teams[teamOrder[teamKey[aux]]].push(aux);
             }
             else if (command.compare("DEQUEUE") == 0) {
-                cout << teams[lowest].front() << endl;
-                    
-                teams[lowest].pop();
-                
-                if (teams[lowest].empty())
-                    lowest++;
+				if (lowest < appear) {
+					aux = teams[lowest].front();
+					
+					cout << aux << endl;
+						
+					teams[lowest].pop();
+					
+					if (teams[lowest].empty()) {
+						teamOrder.erase(teamKey[aux]);
+						lowest++;
+					}
+				}
             }
             
             cin >> command;
@@ -59,7 +66,7 @@ int main () {
         // Clean structures
         teamKey.clear();
         teamOrder.clear();
-        for (i = 0; i < t; i++) {
+        for (i = lowest; i < appear; i++) {
             while (!teams[i].empty())
                 teams[i].pop();
         }
